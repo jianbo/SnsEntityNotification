@@ -1,5 +1,3 @@
-# encoding: utf-8
-#
 # This module is to be included into Device class, and expect device to have
 # valid device_uuid (device token) endpoint_arn AWS SNS arn
 #
@@ -25,7 +23,7 @@
 # Custom sns message protocols
 # http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html
 
-module PushNotification
+module SnsEntityNotification
   module DeviceConcerns
     extend ActiveSupport::Concern
     DEVICE = ['android', 'ios']
@@ -68,7 +66,7 @@ module PushNotification
     def send_notification(message, url = nil, data = {}, sound = 'default', badge = 1)
       raise 'Missing required arn endpoint' unless self.try(:endpoint_arn)
       get_sns_client.publish(target_arn: self.try(:endpoint_arn),
-                             message: PushNotification::Messages::BaseAdaptor.new(get_message_type, message).render.to_json,
+                             message: SnsEntityNotification::Messages::BaseAdaptor.new(get_message_type, message).render.to_json,
                              message_structure: 'json')
     end
 

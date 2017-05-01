@@ -1,6 +1,4 @@
-# encoding: utf-8
-#
-module PushNotification
+module SnsEntityNotification
   class ModelDetailChangesMessage < MessageBase
     attr_accessor :message, :title, :type, :changes, :ids, :entity, :recipients
 
@@ -30,7 +28,7 @@ module PushNotification
     end
 
     def compose_messages
-      self.message_list << PushNotification::ModelDetailChangesMessage.new(
+      self.message_list << SnsEntityNotification::ModelDetailChangesMessage.new(
           @message_data[:event],
           @message_data[:title],
           @message_data[:message],

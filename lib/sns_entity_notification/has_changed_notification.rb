@@ -1,6 +1,4 @@
-# encoding: utf-8
-#
-module PushNotification
+module SnsEntityNotification
   module HasChangedNotification
     extend ActiveSupport::Concern
 
@@ -10,7 +8,7 @@ module PushNotification
 
     class_methods do
       def has_changed_notification(option={}, &block)
-        option[:composer] ||= PushNotification::ModelDetailChangesComposer
+        option[:composer] ||= SnsEntityNotification::ModelDetailChangesComposer
         instance_variable_set(:@_notification_composer, option[:composer]) if option[:composer]
         instance_variable_set(:@_get_recipient, option[:recipients]) if option[:recipients]
         if block_given?
@@ -40,9 +38,9 @@ module PushNotification
     protected
 
     def send_changed_notification
-      return if !PushNotification.enabled? || get_recipient_devices.empty?
+      return if !SnsEntityNotification.enabled? || get_recipient_devices.empty?
       message_list_composer.message_list.each do |message|
-        PushNotification::ModelChangedNotificationWorker.
+        SnsEntityNotification::ModelChangedNotificationWorker.
             perform_async(get_recipient_devices.to_a.map(&:id), message.to_json)
       end
     end
@@ -82,7 +80,7 @@ module PushNotification
     end
 
     def get_message_detail(type)
-      raise 'Invalid get type' unless PushNotification::MessageBase::MESSAGE_PARTS.include?(type)
+      raise 'Invalid get type' unless SnsEntityNotification::MessageBase::MESSAGE_PARTS.include?(type)
       message_body[type]
     end
 

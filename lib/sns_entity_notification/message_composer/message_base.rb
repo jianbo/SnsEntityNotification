@@ -1,6 +1,4 @@
-# encoding: utf-8
-#
-module PushNotification
+module SnsEntityNotification
   class MessageBase
     MESSAGE_PARTS = [:event, :title, :message]
 

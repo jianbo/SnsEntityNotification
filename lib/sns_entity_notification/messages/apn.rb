@@ -1,8 +1,5 @@
-# encoding: utf-8
-#
 require 'forwardable'
-
-module PushNotification
+module SnsEntityNotification
   module Messages
     class Apn
       extend Forwardable

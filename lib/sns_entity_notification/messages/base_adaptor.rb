@@ -1,6 +1,4 @@
-# encoding: utf-8
-#
-module PushNotification
+module SnsEntityNotification
   module Messages
     class BaseAdaptor
       attr_reader :format, :data
@@ -12,7 +10,7 @@ module PushNotification
       end
 
       def render
-        strategy = PushNotification::Messages.const_get(@format.to_s.capitalize).new self
+        strategy = SnsEntityNotification::Messages.const_get(@format.to_s.capitalize).new self
         strategy.execute
       end
     end

@@ -1,18 +1,4 @@
-# {
-#     title: title,
-#     type: type,
-#     message: message,
-#     ids: [1, 2, 3],
-#     entity: 'Job',
-#     type:
-#     recipients: [
-#     ]
-#     changes: {
-#
-#     }
-# }
-
-module PushNotification
+module SnsEntityNotification
   class NotificationPool
     attr_accessor :message_list, :batched_message_list
 
@@ -37,7 +23,7 @@ module PushNotification
     private
 
     def send_to_device(device_ids, message)
-      PushNotification::ModelChangedNotificationWorker.
+      SnsEntityNotification::ModelChangedNotificationWorker.
           perform_async(device_ids, message.to_json)
     end
 

@@ -1,7 +1,5 @@
-# encoding: utf-8
-#
 require 'geoop/exceptions'
-module PushNotification
+module SnsEntityNotification
   class FeedLog
     attr_accessor :owner_id, :entity_type, :entity_id, :entity, :origin_object
 
@@ -24,7 +22,7 @@ module PushNotification
     end
 
     def messages
-      @messages ||= PushNotification.const_get(get_class_type).new(self).message_list
+      @messages ||= SnsEntityNotification.const_get(get_class_type).new(self).message_list
     end
 
     private
