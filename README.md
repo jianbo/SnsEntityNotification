@@ -22,13 +22,13 @@ Or install it yourself as:
 
 ## Usage
 
-    To make ActiveRecord model send push notification
+To make ActiveRecord model send push notification
+
     class Company < ActiveRecord::Base
-        has_changed_notification composer: PushNotification::ModelDetailChangesComposer,
-                                 recipients: -> (company) { company.employees.includes(:devices).map { |user| user.active_devices }.flatten } do
+        has_changed_notification recipients: -> (company) { company.employees.includes(:devices).map { |user| user.active_devices }.flatten } do
           set_message_details do |company|
             {
-                event: PushNotification::MessageObject.event_types[:COMPANY_DETAIL_CHANGED],
+                event: 'Event name',
                 title: 'Company details has changed',
                 message: "Company details changed @ #{company.updated_at}"
             }
@@ -36,30 +36,33 @@ Or install it yourself as:
         end
     end
 
-    This module is to be included into Device class, and expect device to have
-    valid device_uuid (device token) endpoint_arn AWS SNS arn
+
+This module is to be included into Device class, and expect device to have valid device_uuid (device token) endpoint_arn AWS SNS arn
 
     class Device
-    include PushNotification::Client
+        include PushNotification::Client
     end
+
     device = Device.find(1)
+
     device.send_notification('message')
 
     data = {
-    user_id: 1,
-    os_family: 'Android',
-    os_version: 'iOS6'
-    ..
+        user_id: 1,
+        os_family: 'Android',
+        os_version: 'iOS6'
+        ..
     }
 
-    To createa a device
+    To create a device
+
     Device.create_device!({
              device: 'Android',
              device_token: 'device_token',
     })
 
-    Custom sns message protocols
-    http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html
+Custom sns message protocols
+http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html
 
 ## Development
 
