@@ -22,30 +22,44 @@ Or install it yourself as:
 
 ## Usage
 
-      This module is to be included into Device class, and expect device to have
-      valid device_uuid (device token) endpoint_arn AWS SNS arn
+    To make ActiveRecord model send push notification
+    class Company < ActiveRecord::Base
+        has_changed_notification composer: PushNotification::ModelDetailChangesComposer,
+                                 recipients: -> (company) { company.employees.includes(:devices).map { |user| user.active_devices }.flatten } do
+          set_message_details do |company|
+            {
+                event: PushNotification::MessageObject.event_types[:COMPANY_DETAIL_CHANGED],
+                title: 'Company details has changed',
+                message: "Company details changed @ #{company.updated_at}"
+            }
+          end
+        end
+    end
 
-      class Device
-        include PushNotification::Client
-      end
-      device = Device.find(1)
-      device.send_notification('message')
+    This module is to be included into Device class, and expect device to have
+    valid device_uuid (device token) endpoint_arn AWS SNS arn
 
-      data = {
-        user_id: 1,
-        os_family: 'Android',
-        os_version: 'iOS6'
-        ..
-      }
+    class Device
+    include PushNotification::Client
+    end
+    device = Device.find(1)
+    device.send_notification('message')
 
-      To createa a device
-      Device.create_device!({
-                 device: 'Android',
-                 device_token: 'device_token',
-      })
+    data = {
+    user_id: 1,
+    os_family: 'Android',
+    os_version: 'iOS6'
+    ..
+    }
 
-      Custom sns message protocols
-      http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html
+    To createa a device
+    Device.create_device!({
+             device: 'Android',
+             device_token: 'device_token',
+    })
+
+    Custom sns message protocols
+    http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html
 
 ## Development
 

@@ -1,3 +1,17 @@
+# To make ActiveRecord model send push notification
+# class Company < ActiveRecord::Base
+#     has_changed_notification composer: PushNotification::ModelDetailChangesComposer,
+#                              recipients: -> (company) { company.employees.includes(:devices).map { |user| user.active_devices }.flatten } do
+#       set_message_details do |company|
+#         {
+#             event: PushNotification::MessageObject.event_types[:COMPANY_DETAIL_CHANGED],
+#             title: 'Company details has changed',
+#             message: "Company details changed @ #{company.updated_at}"
+#         }
+#       end
+#     end
+# end
+
 module SnsEntityNotification
   module HasChangedNotification
     extend ActiveSupport::Concern
